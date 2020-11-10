@@ -16,7 +16,7 @@ _MAPPING = {
     "status": {"siid": 2, "piid": 6},  # 0 - Stopped, 1 - Opening, 2 - Closing
     "target_position": {"siid": 2, "piid": 7},  # Range: [0, 100, 1]
     # curtain_cfg
-    "manual_enabled": {"siid": 4, "piid": 1},  #
+    "is_manual_enabled": {"siid": 4, "piid": 1},  # Button control enabled
     "polarity": {"siid": 4, "piid": 2},
     "is_position_limited": {"siid": 4, "piid": 3},
     "night_tip_light": {"siid": 4, "piid": 4},
@@ -59,7 +59,6 @@ class CurtainStatus:
             {'did': 'is_position_limited', 'siid': 4, 'piid': 3, 'code': 0, 'value': 0},
             {'did': 'night_tip_light', 'siid': 4, 'piid': 4, 'code': 0, 'value': 1},
             {'did': 'run_time', 'siid': 4, 'piid': 5, 'code': 0, 'value': 0},
-            {'did': 'adjust_value', 'siid': 5, 'piid': 1, 'code': -4000}
         ]}
         """
         self.data = data
@@ -104,11 +103,6 @@ class CurtainStatus:
         """Target curtain position."""
         return self.data["target_position"]
 
-    @property
-    def adjust_value(self) -> int:
-        """ Adjust value."""
-        return self.data["adjust_value"]
-
     def __repr__(self) -> str:
         s = (
             "<CurtainStatus"
@@ -118,8 +112,7 @@ class CurtainStatus:
             "night_tip_light=%s,"
             "run_time=%s,"
             "current_position=%s,"
-            "target_position=%s,"
-            "adjust_value=%s>"
+            "target_position=%s>"
             % (
                 self.status,
                 self.polarity,
@@ -128,7 +121,6 @@ class CurtainStatus:
                 self.run_time,
                 self.current_position,
                 self.target_position,
-                self.adjust_value,
             )
         )
         return s
@@ -144,6 +136,7 @@ class CurtainMiot(MiotDevice):
         start_id: int = 0,
         debug: int = 0,
         lazy_discover: bool = True,
+        model: str = MODEL_CURTAIN_HAGL05,
     ) -> None:
         super().__init__(_MAPPING, ip, token, start_id, debug, lazy_discover)
 
@@ -157,8 +150,7 @@ class CurtainMiot(MiotDevice):
             "Enabled night tip light: {result.night_tip_light}\n"
             "Run time: {result.run_time}\n"
             "Current position: {result.current_position}\n"
-            "Target position: {result.target_position}\n"
-            "Adjust value: {result.adjust_value}\n",
+            "Target position: {result.target_position}\n",
         )
     )
     def status(self) -> CurtainStatus:
