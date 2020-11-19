@@ -16,7 +16,7 @@ _MAPPING = {
     "status": {"siid": 2, "piid": 6},  # 0 - Stopped, 1 - Opening, 2 - Closing
     "target_position": {"siid": 2, "piid": 7},  # Range: [0, 100, 1]
     # curtain_cfg
-    "is_manual_enabled": {"siid": 4, "piid": 1},  # Button control enabled
+    "is_manual_enabled": {"siid": 4, "piid": 1},
     "polarity": {"siid": 4, "piid": 2},
     "is_position_limited": {"siid": 4, "piid": 3},
     "night_tip_light": {"siid": 4, "piid": 4},
@@ -188,7 +188,7 @@ class CurtainMiot(MiotDevice):
         default_output=format_output("Set manual control {manual_enabled}"),
     )
     def set_manual_enabled(self, manual_enabled: bool):
-        """Set manual control of curtain."""
+        """Set manual control of curtain (pull the curtain in the right direction and the motor will continue opening/closing)."""
         return self.set_property("is_manual_enabled", manual_enabled)
 
     @command(
@@ -196,7 +196,7 @@ class CurtainMiot(MiotDevice):
         default_output=format_output("Set polarity to {polarity}"),
     )
     def set_polarity(self, polarity: Polarity):
-        """Set polarity of the motor."""
+        """Set polarity of the motor (motor is placed on the left or right)."""
         return self.set_property("polarity", polarity.value)
 
     @command(
