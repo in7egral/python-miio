@@ -220,7 +220,7 @@ class CurtainMiot(MiotDevice):
         default_output=format_output("Set adjust value to {adjust_value}"),
     )
     def set_adjust_value(self, adjust_value: int):
-        """Adjust to preferred position."""
+        """Set the adjustment value if the direction of movement of the curtain is opposite to the real one."""
         if adjust_value < -100 or adjust_value > 100:
             raise ValueError(
                 "Value must be between [-100, 100] value, was %s" % adjust_value
